@@ -10,6 +10,7 @@ import {task} from 'ember-concurrency';
 /* eslint-disable ghost/ember/alias-model-in-controller */
 export default Controller.extend({
     store: service(),
+    ajax: service(),
 
     queryParams: ['label'],
 
@@ -18,6 +19,7 @@ export default Controller.extend({
     searchText: '',
     modalLabel: null,
     showLabelModal: false,
+    showDeleteAllMembersModal: false,
 
     _hasLoadedLabels: false,
     _availableLabels: null,
@@ -122,6 +124,12 @@ export default Controller.extend({
             }
             iframe.setAttribute('src', downloadURL);
         },
+        toggleDeleteMembersModal() {
+            this.toggleProperty('showDeleteAllMembersModal');
+        },
+        deleteAllMembers() {
+            return this.deleteMembersDb.perform();
+        },
         changeLabel(label, e) {
             if (e) {
                 e.preventDefault();
@@ -153,6 +161,18 @@ export default Controller.extend({
             this.toggleProperty('showLabelModal');
         }
     },
+
+    deleteMembersDb: task(function* () {
+        const url = ghostPaths().url.api('members/db');
+
+        yield this.ajax.del(url, {});
+        // fetch all records
+        yield this.store.query('member', {
+            limit: 'all',
+            order: 'created_at desc'
+        });
+        this.set('members', this.store.peekAll('member'));
+    }),
 
     fetchMembers: task(function* () {
         let newFetchDate = new Date();

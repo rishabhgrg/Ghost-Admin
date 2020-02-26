@@ -38,6 +38,11 @@
                             <span>Export all members</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" {{action 'toggleDeleteMembersModal'}} class="mr2">
+                            <span>Delete all members</span>
+                        </a>
+                    </li>
                 </GhDropdown>
             </span>
             <LinkTo @route="member.new" class="gh-btn gh-btn-green" data-test-new-member-button="true"><span>New member</span></LinkTo>
@@ -101,4 +106,12 @@
         @close={{action "toggleLabelModal"}}
         @modifier="action wide"
     />
+{{/if}}
+
+{{#if this.showDeleteAllMembersModal}}
+    <GhFullscreenModal
+        @modal="delete-members"
+        @confirm={{action "deleteAllMembers"}}
+        @close={{action "toggleDeleteMembersModal"}}
+        @modifier="action wide" />
 {{/if}}

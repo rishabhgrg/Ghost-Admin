@@ -24,4 +24,6 @@ export default function mockMembers(server) {
     server.put('/members/:id/');
 
     server.del('/members/:id/');
+
+    server.del('/members/db/');
 }
