@@ -16,6 +16,8 @@ export default Controller.extend({
 
     imageExtensions: IMAGE_EXTENSIONS,
     imageMimeTypes: IMAGE_MIME_TYPES,
+    showRegenerateKeyModal: false,
+    selectedApiKey: null,
 
     integration: alias('model'),
 
@@ -120,6 +122,19 @@ export default Controller.extend({
             this.set('showDeleteIntegrationModal', false);
         },
 
+        confirmRegenerateKeyModal(apiKey) {
+            this.set('showRegenerateKeyModal', true);
+            this.set('selectedApiKey', apiKey);
+        },
+
+        cancelRegenerateKeyModal() {
+            this.set('showRegenerateKeyModal', false);
+        },
+
+        regenerateKey() {
+            this.store.queryRecord('integration', this.integration.id);
+        },
+
         confirmWebhookDeletion(webhook) {
             this.set('webhookToDelete', webhook);
         },
@@ -131,7 +146,6 @@ export default Controller.extend({
         deleteWebhook() {
             return this.webhookToDelete.destroyRecord();
         }
-
     },
 
     saveIntegration: task(function* () {
