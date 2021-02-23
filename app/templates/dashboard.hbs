@@ -13,23 +13,35 @@
                     <h4 class="gh-dashboard-header secondary">30 days</h4>
                 </div>
                 <div class="gh-dashboard-chart-container">
-                    <div class="gh-dashboard-summary">
-                        {{#if this.mrrStatsData}}
-                            <div class="data">{{this.mrrStatsData.current}}</div>
-                            <div class="growth">{{this.mrrStatsData.percentGrowth}}%</div>
-                        {{else}}
-                            <div class="data">$0</div>
-                            <div class="growth">0.0%</div>
-                        {{/if}}
-                    </div>
-                    {{#if this.mrrStatsData}}
-                        <div class="gh-dashboard-chart">
-                            <GhMembersChart @type="LineWithLine" @nightShift={{feature "nightShift"}} @showSummary={{false}} @showRange={{false}} @chartType="mrr" @chartStats={{this.mrrStatsData}} />
-                        </div>
+
+                    {{#if this.mrrStatsLoading}}
+                        Loading...
                     {{else}}
-                        <div class="gh-dashboard-chart nodata">
-                            No data
-                        </div>
+                        {{#if this.mrrStatsError}}
+                            <p class="error">
+                                There was an error loading MRR
+                                <code>{{this.mrrStatsError.message}}</code>
+                            </p>
+                        {{else}}
+                            <div class="gh-dashboard-summary">
+                                {{#if this.mrrStatsData}}
+                                    <div class="data">{{this.mrrStatsData.current}}</div>
+                                    <div class="growth">{{this.mrrStatsData.percentGrowth}}%</div>
+                                {{else}}
+                                    <div class="data">$0</div>
+                                    <div class="growth">0.0%</div>
+                                {{/if}}
+                            </div>
+                            {{#if this.mrrStatsData}}
+                                <div class="gh-dashboard-chart">
+                                    <GhMembersChart @type="LineWithLine" @nightShift={{feature "nightShift"}} @showSummary={{false}} @showRange={{false}} @chartType="mrr" @chartStats={{this.mrrStatsData}} />
+                                </div>
+                            {{else}}
+                                <div class="gh-dashboard-chart nodata">
+                                    No data
+                                </div>
+                            {{/if}}
+                        {{/if}}
                     {{/if}}
                 </div>
             </div>
